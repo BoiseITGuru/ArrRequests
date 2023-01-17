@@ -38,7 +38,7 @@ func initRouter() *gin.Engine {
 	api.Use(middleware.Auth())
 	tmdb := api.Group("/tmdb")
 	{
-		// Trending Route - Used by FCL to receive nonce token and start authentication process
+		// Trending Route - Get Trending Movies
 		tmdb.GET("/trending", controllers.GetTrending)
 	}
 	return router
