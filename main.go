@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 
+	"github.com/BoiseITGuru/ArrRequests/internal/controllers"
 	"github.com/BoiseITGuru/ArrRequests/internal/database"
+	"github.com/BoiseITGuru/ArrRequests/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,10 +24,22 @@ func main() {
 
 func initRouter() *gin.Engine {
 	router := gin.Default()
-	// ms := router.Group("/ms")
-	// {
-	// 	// Get Token Route - Receives auth token from MS Azure App
-	// 	ms.POST("/auth", controllers.GetRefreshToken)
-	// }
+
+	auth := router.Group("/auth")
+	{
+		// Token Route - Receives login requests and returns a JWT Token
+		auth.POST("/token", controllers.GenerateToken)
+
+		// Refresh Token Route - Receives JWT Refresh Token and return new JWT Token
+		auth.POST("/refresh-token", controllers.RefreshToken)
+	}
+
+	api := router.Group("/api")
+	api.Use(middleware.Auth())
+	tmdb := api.Group("/tmdb")
+	{
+		// Trending Route - Used by FCL to receive nonce token and start authentication process
+		tmdb.GET("/trending", controllers.GetTrending)
+	}
 	return router
 }
