@@ -15,9 +15,7 @@ type Client struct {
 	httpClient *http.Client
 }
 
-var C *Client
-
-func NewClient(httpClient *http.Client, apiKey string) error {
+func NewClient(httpClient *http.Client, apiKey string) (*Client, error) {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -25,7 +23,7 @@ func NewClient(httpClient *http.Client, apiKey string) error {
 	//Create Base URL
 	baseURL, err := url.Parse("https://api.themoviedb.org/3")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	client := &Client{
@@ -35,9 +33,7 @@ func NewClient(httpClient *http.Client, apiKey string) error {
 
 	client.Trending = &TrendingService{client: client}
 
-	C = client
-
-	return nil
+	return client, nil
 }
 
 func (c *Client) NewRequest(method string, path *url.URL, body interface{}) (*http.Request, error) {

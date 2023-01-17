@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"log"
@@ -8,6 +8,8 @@ import (
 
 type Config struct {
 	ServerPort string `mapstructure:"SERVER_PORT"`
+	JwtSecret  string `mapstructure:"JWT_SECRET"`
+	TmdbV4Key  string `mapstructure:"TMDB_v4_API_KEY"`
 }
 
 var AppConfig *Config

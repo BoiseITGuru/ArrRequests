@@ -20,7 +20,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
-		context.Set("user", claims.Address)
+		context.Set("user", claims.ID)
 
 		context.Next()
 	}

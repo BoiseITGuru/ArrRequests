@@ -4,20 +4,25 @@ import (
 	"errors"
 	"time"
 
+	"github.com/BoiseITGuru/ArrRequests/internal/config"
+	"github.com/BoiseITGuru/ArrRequests/internal/models"
+
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("supersecretkey")
+var jwtKey = []byte(config.AppConfig.JwtSecret)
 
 type JWTClaim struct {
-	Address string `json:"address"`
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
 	jwt.StandardClaims
 }
 
-func GenerateJWT(address string) (tokenString string, err error) {
+func GenerateJWT(user models.User) (tokenString string, err error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &JWTClaim{
-		Address: address,
+		ID:       user.ID,
+		Username: user.Username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
